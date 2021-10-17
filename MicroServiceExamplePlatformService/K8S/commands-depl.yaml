@@ -1,0 +1,32 @@
+apiVersion: apps/v1 # application version
+kind: Deployment # kind of application
+metadata: # application information
+  name: commands-depl # name of our yaml
+spec:
+  replicas: 1 # number of instances for horizontal scaling
+  selector: 
+    matchLabels: 
+      app: microserviceexamplecommandservice
+  template:
+    metadata:
+      labels:
+        app: microserviceexamplecommandservice
+    spec:
+      containers:
+        - name: microserviceexamplecommandservice
+          image: faizanaryan94/microserviceexamplecommandservice:latest
+# Use --- to separate cluster ip
+---    
+apiVersion: v1 # application version      
+kind: Service # kind of application
+metadata: # application information
+  name: commands-clusterip-srv # name of our yaml
+spec:
+  type: ClusterIP
+  selector: 
+    app: microserviceexamplecommandservice
+  ports:
+  - name: microserviceexamplecommandservice
+    protocol: TCP
+    port: 80
+    targetPort: 80

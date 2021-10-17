@@ -1,0 +1,38 @@
+apiVersion: apps/v1 # application version
+kind: Deployment # kind of application
+metadata: # application information
+  name: platforms-depl # name of our yaml
+spec:
+  replicas: 1 # number of instances for horizontal scaling
+  selector: 
+    matchLabels: 
+      app: microserviceexampleplatformservice
+  template:
+    metadata:
+      labels:
+        app: microserviceexampleplatformservice
+    spec:
+      containers:
+        - name: microserviceexampleplatformservice
+          image: faizanaryan94/microserviceexampleplatformservice:latest
+# Use --- to separate cluster ip
+---    
+apiVersion: v1 # application version      
+kind: Service # kind of application
+metadata: # application information
+  name: platforms-clusterip-srv # name of our yaml
+spec:
+  type: ClusterIP
+  selector: 
+    app: microserviceexampleplatformservice
+  ports:
+  - name: microserviceexampleplatformservice
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  #grpc stuff goes here
+  - name: platformgrpc
+    protocol: TCP
+    port: 666
+    targetPort: 666
+    
